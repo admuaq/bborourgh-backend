@@ -10,27 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_10_133812) do
+ActiveRecord::Schema.define(version: 2018_10_11_135000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "borough_postcodes", force: :cascade do |t|
+    t.bigint "borough_id"
+    t.bigint "postcode_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["borough_id"], name: "index_borough_postcodes_on_borough_id"
+    t.index ["postcode_id"], name: "index_borough_postcodes_on_postcode_id"
+  end
+
   create_table "boroughs", force: :cascade do |t|
     t.text "name"
+    t.text "towns"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "postcodes", force: :cascade do |t|
+    t.string "outcode"
     t.integer "income"
     t.integer "economicActivity"
     t.integer "health"
     t.integer "crimeRate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "postcodes", force: :cascade do |t|
-    t.bigint "borough_id"
-    t.string "postcode"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["borough_id"], name: "index_postcodes_on_borough_id"
   end
 
 end

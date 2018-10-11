@@ -1,0 +1,2 @@
+class BoroughPostcodesController < ApplicationController
+end
