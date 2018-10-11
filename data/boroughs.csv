@@ -1,0 +1,34 @@
+id,name,income,economicActivity,health,crimeRate
+1,Barking and Dagenham,1,2,3,4
+2,Barnet,1,2,3,4
+3,Bexley,1,2,3,4
+4,Brent,1,2,3,4
+5,Bromley,1,2,3,4
+6,Camden,1,2,3,4
+7,Croydon,1,2,3,4
+8,Ealing,1,2,3,4
+9,Enfield,1,2,3,4
+10,Greenwich,1,2,3,4
+11,Hackney,1,2,3,4
+12,Hammersmith and Fulham,1,2,3,4
+13,Haringey,1,2,3,4
+14,Harrow,1,2,3,4
+15,Havering,1,2,3,4
+16,Hillingdon,1,2,3,4
+17,Hounslow,1,2,3,4
+18,Islington,1,2,3,4
+19,Kensington and Chelsea,1,2,3,4
+20,Kingston upon Thames,1,2,3,4
+21,Lambeth,1,2,3,4
+22,Lewisham,1,2,3,4
+23,Merton,1,2,3,4
+24,Newham,1,2,3,4
+25,Redbridge,1,2,3,4
+26,Richmond Upon Thames,1,2,3,4
+27,Southwark,1,2,3,4
+28,Sutton,1,2,3,4
+29,Tower Hamlets,1,2,3,4
+30,Waltham Forest,1,2,3,4
+31,Wandsworth,1,2,3,4
+32,Westminister,1,2,3,4
+33,City of London,1,2,3,4
