@@ -21,3 +21,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore this model file 
+/app/models/group.rb
+
+# Ignore this migration
+db/migrate/20181012154328_create_groups.rb
