@@ -1,3 +1,3 @@
 class BoroughSerializer < ActiveModel::Serializer
-  attributes :id, :name, :postcodes, :towns
+  attributes :id, :name, :averageIncomeBorough, :health, :happiness, :population, :education, :logoLink, :postcodes
 end

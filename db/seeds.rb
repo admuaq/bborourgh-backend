@@ -11,6 +11,32 @@ require 'csv'
 # require 'net/http'
 require 'httparty'
 require 'byebug'
+require 'date'
+
+#Parses Date for Third Party API calls later, find way to make dynamic
+#As of 13th of October 2018, latest data is correct, for the month of August for most API's
+# Switch to DateTime.now, it requires 'date'
+# DateTime.now.strftime("%Y-%m") => "2018-10"
+# DateTime.now.last_month.last_month.strftime("%Y-%m") => "2018-08"
+d = Date.parse('1st Aug 2018')
+
+def randomNumberGenerator(lowLimit, upLimit)
+  number = rand(lowLimit..upLimit)
+end
+
+def randomNumberGeneratorSalary
+  number = rand(20000..90000)
+end
+
+def callAdzuna(areacode)
+ path = "https://api.adzuna.com/v1/api/jobs/gb/history?app_id=#{Group.first.app_id}&app_key=#{Group.first.ssn}&where=#{areacode}&content-type=application/json"
+ response = HTTParty.get(path)
+end 
+
+def callMetPol(latitude, longitude, date)
+  path = "https://data.police.uk/api/crimes-street/all-crime?lat=#{latitude}&lng=#{longitude}&date=#{date.year}-0#{date.month}"
+  response = HTTParty.get(path)
+end
 
 puts "Destroying existing seeds for repopulation"
 Borough.all.destroy_all
@@ -19,10 +45,17 @@ Postcode.all.destroy_all
 puts "Starting Seed"
 
 boroughs = []
-CSV.foreach('./data/boroughs.csv', headers: true) do |row|
-  boroughs << Borough.new(row.to_h)
+CSV.foreach('./data/boroughs-1.csv', headers: true) do |row|
+  addBorough = Borough.new(row.to_h)
+  # addBorough.health = randomNumberGenerator(50,80)
+  addBorough.population = randomNumberGenerator(10000,30000)
+  boroughs << addBorough
+  
 end
 Borough.import(boroughs)
+puts "Completed Boroughs, starting Postcodes"
+# economicActivity: randomNumberGenerator, 
+#       health: randomNumberGenerator, 
 
 # # boroughs = Borough.create([
     # #     { name: 'Lambeth', income: 5, economicActivity: 4, health:3, crimeRate: 5 },
@@ -52,12 +85,22 @@ end
 
 postcodes - [nil]
 
-def randomNumberGenerator
-  number = rand(1..10)
-end
+postcodes.each do |code|
 
-postcodes.each do |code| 
-     item = Postcode.create({ outcode: code['outcode'], income: randomNumberGenerator, economicActivity: randomNumberGenerator, health: randomNumberGenerator, crimeRate: randomNumberGenerator }) 
+  # Unmute following code to pull Data information from API's
+
+  averageSalaryPostedJob = callAdzuna("#{code['outcode']}")
+  metData = callMetPol(("#{code['latitude']}"), ("#{code['longitude']}"), d )
+
+     item = Postcode.create({ 
+      outcode: code['outcode'],
+      latitude: code['latitude'],
+      longitude: code['longitude'],
+      averageSalaryPostedJob: averageSalaryPostedJob.parsed_response['month']["#{d.year}-0#{d.month}"], 
+      crimeRate: metData.length,
+      houseListings: randomNumberGenerator(1,30) })
+
+    # IMPORTANT NOTE TO SELF: You need to add the health (CSV), (Zoopla?) house listings and education (CSV) attributes to the item above!!!
      
      code['admin_district'].each{ |district| 
       borough = Borough.find_by(name: district )
@@ -67,22 +110,28 @@ postcodes.each do |code|
         borough.postcodes << item 
       end
     }
+
+    # Use this code below for testing
+    # item = Postcode.create({ 
+    #   outcode: code['outcode'],
+    #   latitude: code['latitude'],
+    #   longitude: code['longitude'],
+    #   averageSalaryPostedJob: randomNumberGeneratorSalary, 
+    #   crimeRate: randomNumberGenerator(1,10),
+    #   houseListings: randomNumberGenerator(1,30)
+    #  }) 
+     
+    #  code['admin_district'].each{ |district| 
+    #   borough = Borough.find_by(name: district )
+    #   if borough === nil 
+    #     next
+    #   else
+    #     borough.postcodes << item 
+    #   end
+    # }
      
 end 
-
+puts "Completed Postcodes"
 puts "Got list"
 # "To find specific postcode, type: 'request['result'].find{|postcode| postcode['query'] === 'POSTCODE HERE'}' for example"
 # To find borough: 'request['result'].find{|postcode| postcode['query'] === 'POSTCODE HERE'}['result']['admin_district']'
-
-# postcodes = Postcode.create([
-        #     { postcode: 'SW16', borough_id: 21 },
-        #     { postcode: 'W1', borough_id: 3 },
-        #     { postcode: 'SW18', borough_id: 2 }
-        # ])
-
-    #     t.belongs_to :borough, index: true
-    #   t.string :outcode
-    #   t.integer :income
-    #   t.integer :economicActivity
-    #   t.integer :health
-    #   t.integer :crimeRate

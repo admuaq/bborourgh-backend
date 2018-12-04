@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_11_135000) do
+ActiveRecord::Schema.define(version: 2018_10_12_154328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,17 +26,34 @@ ActiveRecord::Schema.define(version: 2018_10_11_135000) do
 
   create_table "boroughs", force: :cascade do |t|
     t.text "name"
-    t.text "towns"
+    t.integer "averageIncomeBorough"
+    t.decimal "health"
+    t.decimal "happiness"
+    t.decimal "education"
+    t.decimal "population"
+    t.text "logoLink"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "ssn"
+    t.string "encrypted_ssn"
+    t.string "encrypted_ssn_iv"
+    t.string "app_id"
+    t.string "encrypted_appid"
+    t.string "encrypted_appid_iv"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "postcodes", force: :cascade do |t|
     t.string "outcode"
-    t.integer "income"
-    t.integer "economicActivity"
-    t.integer "health"
+    t.string "latitude"
+    t.string "longitude"
+    t.integer "averageSalaryPostedJob"
     t.integer "crimeRate"
+    t.integer "houseListings"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
